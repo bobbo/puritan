@@ -1,3 +1,5 @@
+.DEFAULT_GOAL = cmd
+
 CC = clang
 CFLAGS = -Wall -fpic
 

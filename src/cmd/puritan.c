@@ -19,11 +19,12 @@ int main(int argc, char **argv)
     }
 
     result = puritan_vm_load_program(&vm, (uint16_t *) &EXAMPLE_PROGRAM, EXAMPLE_PROGRAM_LENGTH);
-
-    for (int i = 0; i < vm.exec_ctx.program_length; i++)
+    if (result != 0)
     {
-        printf("%#04x ", vm.exec_ctx.program[i]);
+        fprintf(stderr, "Loading program failed: errno %i", result);
+        return result;
     }
-    printf("\n");
 
+    result = puritan_vm_run(&vm);
+    return result;
 }
