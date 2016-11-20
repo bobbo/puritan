@@ -1,8 +1,11 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <stdio.h>
 
 #include <puritan/puritan.h>
+
+#include "loader.h"
 
 int puritan_vm_init(puritan_vm_t *vm)
 {
@@ -25,14 +28,14 @@ int puritan_vm_load_program(puritan_vm_t *vm, uint16_t *bytes, size_t len)
 {
     puritan_exec_ctx_t *ctx = &vm->exec_ctx;
 
-    if ((ctx->program = malloc(sizeof(uint16_t) * len)) == NULL)
+    program_loader_t loader = new_loader(bytes, len);
+    if (load_program(&loader) != 0)
     {
-        return ENOMEM;
+        return EINVAL;
     }
 
-    memcpy(ctx->program, bytes, sizeof(uint16_t) * len);
-
-    ctx->program_length = len;
+    ctx->program = loader.program;
+    ctx->program_length = loader.program_length;
     ctx->ready = 1;
 
     return 0;
