@@ -18,6 +18,5 @@ extern const size_t MAGIC_LEN;
 
 program_loader_t new_loader(uint16_t *bytes, size_t len);
 int load_program(program_loader_t *loader);
-void free_loader(program_loader_t *loader);
 
 #endif

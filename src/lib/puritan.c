@@ -61,6 +61,17 @@ int puritan_exec_ctx_run(puritan_exec_ctx_t *ctx)
     return 0;
 }
 
+void puritan_exec_ctx_free(puritan_exec_ctx_t *ctx)
+{
+    free(ctx->program);
+    ctx->program = NULL;
+}
+
+void puritan_vm_free(puritan_vm_t *vm)
+{
+    puritan_exec_ctx_free(&vm->exec_ctx);
+}
+
 int puritan_vm_run(puritan_vm_t *vm)
 {
     puritan_exec_ctx_t *ctx = &vm->exec_ctx;

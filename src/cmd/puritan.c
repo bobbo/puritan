@@ -29,5 +29,7 @@ int main(int argc, char **argv)
     }
 
     result = puritan_vm_run(&vm);
+
+    puritan_vm_free(&vm);
     return result;
 }
