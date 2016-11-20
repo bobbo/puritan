@@ -2,6 +2,7 @@
 #include <errno.h>
 #include <string.h>
 #include <stdio.h>
+#include <sys/stat.h>
 
 #include <puritan/puritan.h>
 
@@ -39,6 +40,33 @@ int puritan_vm_load_program(puritan_vm_t *vm, uint16_t *bytes, size_t len)
     ctx->ready = 1;
 
     return 0;
+}
+
+int puritan_vm_load_program_file(puritan_vm_t *vm, char *file_name)
+{
+    struct stat st;
+
+    if (stat(file_name, &st) != 0)
+    {
+        return EINVAL;
+    }
+
+    FILE* f_handle = fopen(file_name, "rb");
+    if (f_handle == NULL)
+    {
+        return EINVAL;
+    }
+
+    uint16_t *bin = malloc(sizeof(uint16_t) * st.st_size);
+    if (bin == NULL)
+    {
+        return ENOMEM;
+    }
+
+    // TODO: Check read length/retry
+    fread(bin, sizeof(uint16_t), st.st_size, f_handle);
+
+    return puritan_vm_load_program(vm, bin, st.st_size);
 }
 
 int puritan_exec_ctx_run(puritan_exec_ctx_t *ctx)

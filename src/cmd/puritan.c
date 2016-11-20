@@ -21,7 +21,7 @@ int main(int argc, char **argv)
         return result;
     }
 
-    result = puritan_vm_load_program(&vm, (uint16_t*) EXAMPLE_PROGRAM, EXAMPLE_PROGRAM_LENGTH);
+    result = puritan_vm_load_program_file(&vm, "example.bin");
     if (result != 0)
     {
         fprintf(stderr, "Loading program failed: errno %i\n", result);
