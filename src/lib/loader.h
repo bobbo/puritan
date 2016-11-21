@@ -13,6 +13,12 @@ typedef struct {
     size_t program_length;
 } program_loader_t;
 
+typedef struct __attribute__((packed)) {
+    uint16_t magic[8];
+    uint64_t sym_table_length;
+    uint64_t program_length;
+} program_header_t;
+
 extern const uint16_t MAGIC[8];
 extern const size_t MAGIC_LEN;
 

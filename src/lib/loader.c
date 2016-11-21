@@ -19,16 +19,21 @@ const uint16_t MAGIC[MAGIC_LEN] = {
 program_loader_t new_loader(uint16_t *bytes, size_t len)
 {
     program_loader_t loader = { .bin = bytes, .bin_length = len };
-
-    // TODO: This is a hack until header parsing is implemented
-    loader.bin_offset = 0;
-    loader.program_length = loader.bin_length;
-
     return loader;
 }
 
 int parse_header(program_loader_t *loader)
 {
+    program_header_t *header = (program_header_t *) loader->bin;
+
+    if (memcmp(header->magic, MAGIC, MAGIC_LEN) != 0)
+    {
+        return EINVAL;
+    }
+
+    loader->program_length = header->program_length;
+    loader->bin_offset += sizeof(program_header_t) / sizeof(uint16_t);
+
     return 0;
 }
 
